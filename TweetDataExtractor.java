@@ -24,6 +24,32 @@ public class TweetDataExtractor {
 		BufferedWriter out = new BufferedWriter(new FileWriter(outputPath));
 		out.write(String.valueOf(collection.getCount()));
 		out.write("\n");
+		DBCursor cursor = collection.find();
+		try {
+			while(cursor.hasNext()) {
+				DBObject tweet = cursor.next();
+				DBObject user = (DBObject) tweet.get("user");
+
+				out.write(user.get("followers_count") + " ");
+
+				out.write(user.get("verified") + " ");
+
+				out.write(user.get("listed_count") + " ");
+
+				String time = ((String)tweet.get("created_at")).split("\\s+")[3];
+				out.write(time + " ");
+
+				if (tweet.get("in_reply_to_user_id") != null) {
+					out.write("Fresh" + " ");
+				} else {
+					out.write("Reply" + " ");
+				}
+
+				out.write(tweet.get("retweet_count") + "\n");
+			}
+		} finally {
+			cursor.close();
+		}
 		out.close();
 	}
 }

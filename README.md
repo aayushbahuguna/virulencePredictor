@@ -5,7 +5,7 @@ Format of Data.txt
 ------------------
 ```
 NumberOfFeatures(n) NumberOfTweets(t)
-Feature1 Feature2 Feature3 Feature4 ... FeatureN NumberOfRetweets
+Feature1 Feature2 ... FeatureN NumberOfRetweets
 :
 :
 t lines
@@ -14,14 +14,14 @@ t lines
 ```
 Feature Description
 -------------------
-Feature1: Number of Followers
+Feature1: Number of Followers: user->followers_count
 
-Feature2: Verified User
+Feature2: Verified User: user->verified
 
-Feature3: Time of Tweet
+Feature3: Number of times user is listed: user->listed_count
 
-Feature4: Reply/Fresh
+Feature4: Time of Tweet: created_at
 
-Feature5: 
+Feature5: Reply/Fresh: in_reply_to_user_id
 
-Feature6:
+NumberOfRetweets: retweet_count
