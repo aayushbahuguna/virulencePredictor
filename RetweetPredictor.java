@@ -1,10 +1,13 @@
 package virulencePredictor;
 
-
+import java.io.FileWriter;
+import java.io.IOException;
+/*
+ * This class calls TweetDataExtractor to extract required data into a file "Data.txt". It then applies Machine Learning
+ * algorithm Liner Regression to calculate data required for predicting number of retweets of a given tweet and stores that data into a file "MLData.txt"
+ * Class provides a static function used for predicting number of retweets given the features of tweet. 
+ */
 public class RetweetPredictor {
-	int numberOfFeatures;
-	int numberOfSamples;
-	TweetDataExtractor tweetDataExtractor;
 	TrainingData trainingData;
 	double[] theta;
 	double J;
@@ -12,54 +15,51 @@ public class RetweetPredictor {
 	double alpha = 0.00000001;
 	double epsilon = 0.000001;
 
-	public RetweetPredictor(int numberOfFeatures, int numberOfSamples) {
-		this.numberOfFeatures = numberOfFeatures;
-		this.numberOfSamples = numberOfSamples;
-		tweetDataExtractor = new TweetDataExtractor(numberOfFeatures, numberOfSamples);
-		trainingData = tweetDataExtractor.trainingData;
+	public RetweetPredictor() throws IOException {
+		TweetDataExtractor dataExtractor = new TweetDataExtractor("Directory for mongo database");
+		dataExtractor.extractData();
+		trainingData = new TrainingData("Data.txt");
 		theta = new double[1 + trainingData.numberOfFeatures];
 		J = 0;
 		gradient = new double[trainingData.numberOfFeatures];
+		Train();
 	}
-
-	public int predict(int[] feature) {
-		double predictedNumberOfRewtweets = 0;
-		for (int i = 0; i < feature.length; i++) {
-			predictedNumberOfRewtweets += (theta[i] * feature[i]);
-		}
-		return (int) predictedNumberOfRewtweets;
-	}
-
-	public void Train() {
+	
+	public void Train() throws IOException {
 		double Jo = J + 1;
 		while (Math.abs(J - Jo) > epsilon) {
 			Jo = J;
 			J = calculateJ();
 			gradientDescent();
 		}
+		FileWriter fw = new FileWriter("MLData.txt");
+		for(int i = 0; i <= trainingData.numberOfFeatures; i++){
+			fw.write(theta[i] + " ");
+		}
+		fw.close();
 	}
 
 	public void gradientDescent() {
-		for (int i = 0; i < numberOfFeatures; i++) {
+		for (int i = 0; i < trainingData.numberOfFeatures; i++) {
 			gradient[i] = 0;
 		}
-		for (int j = 0; j < numberOfFeatures; j++) {
-			for (int i = 0; i < numberOfSamples; i++) {
+		for (int j = 0; j < trainingData.numberOfFeatures; j++) {
+			for (int i = 0; i < trainingData.numberOfSamples; i++) {
 				gradient[j] += (h(trainingData.X[i]) - trainingData.y[i]) * trainingData.X[i][j];
 			}
-			gradient[j] /= numberOfSamples;
+			gradient[j] /= trainingData.numberOfSamples;
 		}
-		for (int i = 0; i < numberOfFeatures; i++) {
+		for (int i = 0; i < trainingData.numberOfFeatures; i++) {
 			theta[i] = theta[i] - alpha * gradient[i];
 		}
 	}
 
 	double calculateJ() {
 		double totalCost = 0;
-		for (int i = 0; i < numberOfSamples; i++) {
+		for (int i = 0; i < trainingData.numberOfSamples; i++) {
 			totalCost += Math.pow(h(trainingData.X[i]) - trainingData.y[i], 2);
 		}
-		return totalCost / (2 * numberOfSamples);
+		return totalCost / (2 * trainingData.numberOfSamples);
 	}
 
 	public double h(double[] X) {
