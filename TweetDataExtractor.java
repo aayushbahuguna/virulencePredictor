@@ -3,7 +3,6 @@ package virulencePredictor;
 import java.io.*;
 import java.util.*;
 import com.mongodb.*;
-
 /*
  * Extract features from tweets stored in mongodb collections to a txt file.
  */
