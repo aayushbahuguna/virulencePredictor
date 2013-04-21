@@ -3,12 +3,25 @@ VirulencePredictor
 
 Format of Data.txt
 ------------------
-Feature1 Feature2 Feature3 Feature4 Feature5 Feature6 Number of Retweets
+```
+NumberOfTweets(t) NumberOfFeatures(n)
+Feature1 Feature2 ... FeatureN NumberOfRetweets
+:
+:
+t lines
+:
+:
+```
+Feature Description
+-------------------
+Feature1: Number of Followers: user->followers_count
 
+Feature2: Verified User: user->verified
 
-Feature1: Number of Followers
-Feature2: Verified User
-Feature3: Time of Tweet
-Feature4: Reply/Fresh
-Feature5: 
-Feature6:
+Feature3: Number of times user is listed: user->listed_count
+
+Feature4: Time of Tweet: created_at
+
+Feature5: Reply/Fresh: in_reply_to_user_id
+
+NumberOfRetweets: retweet_count
