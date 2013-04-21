@@ -1,25 +1,35 @@
 package virulencePredictor;
 
-import java.io.FileNotFoundException;
-import java.net.UnknownHostException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import com.mongodb.DB;
+import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 
 /*
  * Class uses mongodb api calls to fill an object of Training Data
  */
 public class TweetDataExtractor {
-	public TrainingData trainingData;
-	String filePath;
-
-	public TweetDataExtractor(String dirPath) throws FileNotFoundException {
+	static String databaseName;
+	static String collectionName;
+	static String outputPath;
+	
+	public static void main(String[] args) throws IOException{
+		databaseName = "Tech";
+		collectionName = "tweets";
+		outputPath = "C:\\Users\\Aayush\\Desktop\\virulencePredictor\\FeaturesData.txt";		
+		extractFeatures();
 	}
 
-	public void extractData() throws UnknownHostException {
-			MongoClient mongoClient = new MongoClient("localhost");
-			DB db = mongoClient.getDB( "mydb" );
-			
-			
-	}
+	public static void extractFeatures() throws IOException {
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+		DB db = mongoClient.getDB(databaseName);
+		DBCollection collection = db.getCollection(collectionName);
+		BufferedWriter out = new BufferedWriter(new FileWriter(outputPath));
+		out.write("" + collection.getCount());
+		out.write("\n");
+		out.close();
+	}	
 }

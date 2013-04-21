@@ -16,8 +16,7 @@ public class RetweetPredictor {
 	double epsilon = 0.000001;
 
 	public RetweetPredictor() throws IOException {
-		TweetDataExtractor dataExtractor = new TweetDataExtractor("Directory for mongo database");
-		dataExtractor.extractData();
+		TweetDataExtractor dataExtractor = new TweetDataExtractor();		
 		trainingData = new TrainingData("Data.txt");
 		theta = new double[1 + trainingData.numberOfFeatures];
 		J = 0;
