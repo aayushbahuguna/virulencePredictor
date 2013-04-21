@@ -1,43 +1,30 @@
 package virulencePredictor;
 
-import java.io.File;
-import java.net.UnknownHostException;
-import java.util.Scanner;
-
+import java.io.*;
+import java.util.*;
 import com.mongodb.*;
 
 /*
- * Class uses mongodb api calls to fill an object of Training Data
+ * Extract features from tweets stored in mongodb collections to a txt file.
  */
 public class TweetDataExtractor {
-	public TrainingData trainingData;
-	String filePath;
+	static String databaseName;
+	static String collectionName;
+	static String outputPath;
 
-	public TweetDataExtractor(int numberOfFeatures, int numberOfSamples) {
-		trainingData = new TrainingData(numberOfFeatures, numberOfSamples);
+	public TweetDataExtractor(String databaseName, String collectionName, String outputPath) {
+		this.databaseName = databaseName;
+		this.collectionName = collectionName;
+		this.outputPath = outputPath;
 	}
 
-	public void fillData() throws UnknownHostException {
-		// If we have already extracted data once we can just read it from file. We don't need to extract data using mongodb api
-		File file = new File(filePath);
-		if (file.exists()) {
-			// Read from file and fill trainingData
-			Scanner st = new Scanner("Data.txt");
-			
-			
-		} else {
-			// Extract data from mongodb and write useful data to file
-			extractData();
-			writeToFile();
-		}
-	}
-
-	public void extractData() {
-			MongoClient mongoClient = new MongoClient("localhost");
-			DB db = mongoClient.getDB( "mydb" );
-			
-	}
-
-	public void writeToFile() {
+	public static void extractFeatures() throws IOException {
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+		DB db = mongoClient.getDB(databaseName);
+		DBCollection collection = db.getCollection(collectionName);
+		BufferedWriter out = new BufferedWriter(new FileWriter(outputPath));
+		out.write(String.valueOf(collection.getCount()));
+		out.write("\n");
+		out.close();
 	}
 }

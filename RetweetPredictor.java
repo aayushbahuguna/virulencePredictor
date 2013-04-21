@@ -1,6 +1,5 @@
 package virulencePredictor;
 
-
 public class RetweetPredictor {
 	int numberOfFeatures;
 	int numberOfSamples;
@@ -30,7 +29,7 @@ public class RetweetPredictor {
 		return (int) predictedNumberOfRewtweets;
 	}
 
-	public void Train() {
+	public void train() {
 		double Jo = J + 1;
 		while (Math.abs(J - Jo) > epsilon) {
 			Jo = J;
@@ -76,5 +75,4 @@ public class RetweetPredictor {
 		}
 		System.out.println();
 	}
-
 }
