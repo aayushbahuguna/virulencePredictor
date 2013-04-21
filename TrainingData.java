@@ -5,8 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 
-/* Assuming Data.txt is already present this class reads Data.txt to fill object of TrainingData
- * 
+/*
+ * Assuming Data.txt is already present, this class reads
+ * Data.txt to fill object of TrainingData
  */
 public class TrainingData {
 	// Number of features used for tweet prediction

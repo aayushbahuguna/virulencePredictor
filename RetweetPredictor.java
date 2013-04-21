@@ -3,9 +3,12 @@ package virulencePredictor;
 import java.io.FileWriter;
 import java.io.IOException;
 /*
- * This class calls TweetDataExtractor to extract required data into a file "Data.txt". It then applies Machine Learning
- * algorithm Liner Regression to calculate data required for predicting number of retweets of a given tweet and stores that data into a file "MLData.txt"
- * Class provides a static function used for predicting number of retweets given the features of tweet. 
+ * This class calls TweetDataExtractor to extract required data into
+ * a file "Data.txt". It then applies ML algorithm Liner Regression
+ * to calculate data required for predicting number of retweets of a
+ * given tweet and stores that data into a file "MLData.txt"
+ * Class provides a static function used for predicting number of
+ * retweets given the features of tweet. 
  */
 public class RetweetPredictor {
 	TrainingData trainingData;
