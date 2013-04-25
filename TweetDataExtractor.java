@@ -23,13 +23,12 @@ public class TweetDataExtractor {
 		DB db = mongoClient.getDB(databaseName);
 		DBCollection collection = db.getCollection(collectionName);
 		BufferedWriter out = new BufferedWriter(new FileWriter(outputPath));
-		int count = 100000;
-		// count = Integer.parseInt(String.valueOf(collection.getCount()));
+		int count = Integer.parseInt(String.valueOf(collection.getCount()));
 		out.write(count + " " + 5);
 		out.write("\n");
 		DBCursor cursor = collection.find();
 		try {
-			while (cursor.hasNext() && count-- > 0) {
+			while (cursor.hasNext()) {
 				DBObject tweet = cursor.next();
 				DBObject user = (DBObject) tweet.get("user");
 

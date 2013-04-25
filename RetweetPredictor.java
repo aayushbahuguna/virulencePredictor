@@ -2,6 +2,7 @@ package virulencePredictor;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.File;
 
 /*
  * This class calls TweetDataExtractor to extract required data into
@@ -12,7 +13,6 @@ import java.io.IOException;
  * retweets given the features of tweet. 
  */
 public class RetweetPredictor {
-	public static String workingDirectory = "C://Users//Aayush//Dropbox//workspace//workspaceWindows//AlgorithmJava//IIT Ropar//virulencePredictor//";
 	TrainingData trainingData;
 	double[] theta;
 	double J;
@@ -22,11 +22,13 @@ public class RetweetPredictor {
 
 	public RetweetPredictor(String file) throws IOException {
 		System.out.println("Data Extraction started");
-		// TweetDataExtractor dataExtractor = new TweetDataExtractor("Tech",
-		// "tweets", workingDirectory + "Data.txt");
-		// dataExtractor.extractFeatures();
+		File f = new File("Data.txt");
+		if (!f.exists()) {
+			TweetDataExtractor dataExtractor = new TweetDataExtractor("Tech", "tweets", "Data.txt");
+			dataExtractor.extractFeatures();
+		}
 		System.out.println("Done with data extraction");
-		trainingData = new TrainingData(workingDirectory + "Data.txt");
+		trainingData = new TrainingData("Data.txt");
 		theta = new double[1 + trainingData.numberOfFeatures];
 		J = 0;
 		gradient = new double[trainingData.numberOfFeatures];
@@ -45,7 +47,7 @@ public class RetweetPredictor {
 	}
 
 	public void writeToFile(String file) throws IOException {
-		FileWriter fw = new FileWriter(workingDirectory + file);
+		FileWriter fw = new FileWriter(file);
 		for (int i = 0; i < 1 + trainingData.numberOfFeatures; i++) {
 			fw.write(trainingData.average[i] + " ");
 		}

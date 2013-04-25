@@ -27,8 +27,9 @@ public class TrainingData {
 		System.out.println("Starting Reading Data");
 		Scanner st = new Scanner(new BufferedReader(new FileReader(filePath)));
 		this.numberOfSamples = st.nextInt();
-		int extraFeatures = 10;
-		this.numberOfFeatures = st.nextInt() + extraFeatures;
+		int originalFeatures = st.nextInt();
+		int extraFeatures = (originalFeatures*(originalFeatures - 1))/2;
+		this.numberOfFeatures = originalFeatures + extraFeatures;
 		X = new double[numberOfSamples][1 + numberOfFeatures];
 		y = new double[numberOfSamples];
 		average = new double[1 + numberOfFeatures];
@@ -36,37 +37,22 @@ public class TrainingData {
 		for (int i = 0; i < numberOfSamples; i++) {
 			X[i][0] = 1;
 			double numberOfFollowers = st.nextDouble();
-			if (numberOfFollowers <= 10000) {
-				X[i][1] = numberOfFollowers;
-				int j = 2;
-				for (; j < 1 + numberOfFeatures - extraFeatures; j++) {
-					X[i][j] = st.nextDouble();
-				}
-				X[i][j++] = X[i][1] * X[i][2];
-				X[i][j++] = X[i][1] * X[i][3];
-				X[i][j++] = X[i][1] * X[i][4];
-				X[i][j++] = X[i][1] * X[i][5];
-				X[i][j++] = X[i][2] * X[i][3];
-				X[i][j++] = X[i][2] * X[i][4];
-				X[i][j++] = X[i][2] * X[i][5];
-				X[i][j++] = X[i][3] * X[i][4];
-				X[i][j++] = X[i][3] * X[i][5];
-				X[i][j++] = X[i][4] * X[i][1];
-
-				y[i] = st.nextDouble();
-			} else {
-				for (int j = 2; j < 1 + numberOfFeatures; j++) {
-					st.nextDouble();
-				}
-				st.nextDouble();
-				i--;
+			X[i][1] = numberOfFollowers;
+			int j = 2;
+			for (; j < 1 + numberOfFeatures - extraFeatures; j++) {
+				X[i][j] = st.nextDouble();
 			}
+			for (int k = 1; k <= originalFeatures; k++) {
+				for (int l = k+1; l <= originalFeatures; l++) {
+					X[i][j++] = X[i][k] * X[i][l];
+				}
+			}
+			y[i] = st.nextDouble();
 		}
 		System.out.println("Done Reading Data");
 		System.out.println("Starting Normalization");
 		normalizeFeatures();
 		System.out.println("Done Normalizing Data");
-
 	}
 
 	public void normalizeFeatures() throws IOException {
