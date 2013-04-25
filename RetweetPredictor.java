@@ -2,6 +2,7 @@ package virulencePredictor;
 
 import java.io.FileWriter;
 import java.io.IOException;
+
 /*
  * This class calls TweetDataExtractor to extract required data into
  * a file "Data.txt". It then applies ML algorithm Liner Regression
@@ -11,51 +12,54 @@ import java.io.IOException;
  * retweets given the features of tweet. 
  */
 public class RetweetPredictor {
+	public static String workingDirectory = "C://Users//Aayush//Dropbox//workspace//workspaceWindows//AlgorithmJava//IIT Ropar//virulencePredictor//";
 	TrainingData trainingData;
 	double[] theta;
 	double J;
 	double[] gradient;
-	double alpha = 0.01;
-	double epsilon = 0.01;
-	
+	double alpha = 2;
+	double epsilon = 100;
 
-	public RetweetPredictor() throws IOException {
-		TweetDataExtractor dataExtractor = new TweetDataExtractor("Tech", "tweets", "C://Users//Aayush//Dropbox//workspace//workspaceWindows//AlgorithmJava//IIT Ropar//virulencePredictor//Data.txt");
-		dataExtractor.extractFeatures();
+	public RetweetPredictor(String file) throws IOException {
+		System.out.println("Data Extraction started");
+		// TweetDataExtractor dataExtractor = new TweetDataExtractor("Tech",
+		// "tweets", workingDirectory + "Data.txt");
+		// dataExtractor.extractFeatures();
 		System.out.println("Done with data extraction");
-		trainingData = new TrainingData("C://Users//Aayush//Dropbox//workspace//workspaceWindows//AlgorithmJava//IIT Ropar//virulencePredictor//Data.txt");
+		trainingData = new TrainingData(workingDirectory + "Data.txt");
 		theta = new double[1 + trainingData.numberOfFeatures];
 		J = 0;
 		gradient = new double[trainingData.numberOfFeatures];
 		train();
-		writeToFile();
+		writeToFile(file);
 	}
 
-		
 	public void train() throws IOException {
-		double Jo = J + 1;
-		while (Math.abs(J - Jo) > epsilon) {
+		double Jo = J + 100;
+		while (Math.abs(J - Jo) >= epsilon) {
+			 System.out.println((J - Jo) + " " + (Math.abs(J - Jo) > epsilon ? "true" : "false"));
 			Jo = J;
 			J = calculateJ();
 			gradientDescent();
 		}
 	}
 
-	public void writeToFile() throws IOException{
-		FileWriter fw = new FileWriter("C://Users//Aayush//Dropbox//workspace//workspaceWindows//AlgorithmJava//IIT Ropar//virulencePredictor//MLData.txt");
-		for(int i = 0; i < 1 + trainingData.numberOfFeatures; i++){
+	public void writeToFile(String file) throws IOException {
+		FileWriter fw = new FileWriter(workingDirectory + file);
+		for (int i = 0; i < 1 + trainingData.numberOfFeatures; i++) {
 			fw.write(trainingData.average[i] + " ");
 		}
 		fw.write("\n");
-		for(int i = 0; i < 1 + trainingData.numberOfFeatures; i++){
+		for (int i = 0; i < 1 + trainingData.numberOfFeatures; i++) {
 			fw.write(trainingData.range[i] + " ");
 		}
 		fw.write("\n");
-		for(int i = 0; i < 1 + trainingData.numberOfFeatures; i++){
+		for (int i = 0; i < 1 + trainingData.numberOfFeatures; i++) {
 			fw.write(theta[i] + " ");
 		}
 		fw.close();
 	}
+
 	public void gradientDescent() {
 		for (int i = 0; i < trainingData.numberOfFeatures; i++) {
 			gradient[i] = 0;
