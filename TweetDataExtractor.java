@@ -8,9 +8,9 @@ import com.mongodb.*;
  * Extract features from tweets stored in mongodb collections to a txt file.
  */
 public class TweetDataExtractor {
-	static String databaseName;
-	static String collectionName;
-	static String outputPath;
+	String databaseName;
+	String collectionName;
+	String outputPath;
 
 	public TweetDataExtractor(String databaseName, String collectionName, String outputPath) {
 		this.databaseName = databaseName;
@@ -18,7 +18,21 @@ public class TweetDataExtractor {
 		this.outputPath = outputPath;
 	}
 
-	public static void extractFeatures() throws IOException {
+	public static void main(String[] args) throws IOException {
+		File f = new File("Data.txt");
+		if (!f.exists()) {
+			System.out.println("Data Extraction started");
+			TweetDataExtractor dataExtractor = new TweetDataExtractor("Tech", "tweets", "Data.txt");
+			dataExtractor.extractFeatures();
+			System.out.println("Done with data extraction");
+		} else {
+			System.out.println("Data.txt already exists");
+			System.out.println("Please delete Data.txt if you want to extract features from mongodb database.");
+			System.out.println("This is in place to avoid accedental overwrite of Data.txt");
+		}
+	}
+
+	public void extractFeatures() throws IOException {
 		MongoClient mongoClient = new MongoClient("localhost", 27017);
 		DB db = mongoClient.getDB(databaseName);
 		DBCollection collection = db.getCollection(collectionName);

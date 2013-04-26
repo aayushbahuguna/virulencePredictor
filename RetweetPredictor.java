@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.File;
 
 /*
- * This class calls TweetDataExtractor to extract required data into
- * a file "Data.txt". It then applies ML algorithm Liner Regression
- * to calculate data required for predicting number of retweets of a
+ * This class reads the required features from the file "Data.txt"
+ * It then applies ML algorithm Liner Regression to calculate
+ * data required for predicting number of retweets of a
  * given tweet and stores that data into a file "MLData.txt"
  * Class provides a static function used for predicting number of
  * retweets given the features of tweet. 
@@ -21,13 +21,6 @@ public class RetweetPredictor {
 	double epsilon = 100;
 
 	public RetweetPredictor(String file) throws IOException {
-		System.out.println("Data Extraction started");
-		File f = new File("Data.txt");
-		if (!f.exists()) {
-			TweetDataExtractor dataExtractor = new TweetDataExtractor("Tech", "tweets", "Data.txt");
-			dataExtractor.extractFeatures();
-		}
-		System.out.println("Done with data extraction");
 		trainingData = new TrainingData("Data.txt");
 		theta = new double[1 + trainingData.numberOfFeatures];
 		J = 0;

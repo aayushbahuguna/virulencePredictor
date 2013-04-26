@@ -25,3 +25,16 @@ Feature4: Time of Tweet: created_at
 Feature5: Reply/Fresh: in_reply_to_user_id
 
 NumberOfRetweets: retweet_count
+
+How to run
+----------
+To extract the features from the tweet contained in the mongodb database to "Data.txt"
+```
+javac -classpath 'mongo-java-driver-2.11.1.jar' TweetDataExtractor.java
+java -classpath '..:mongo-java-driver-2.11.1.java' virulencePredictor.TweetDataExtractor
+```
+To run the program once we have "Data.txt"
+```
+javac Solution.java TrainingData.java RetweetPredictor.java
+java -classpath .. virulencePredictor.Solution
+```

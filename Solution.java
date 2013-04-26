@@ -19,9 +19,9 @@ class ML {
 	public ML(int m, String file) throws IOException {
 		File f = new File(file);
 		if (f.exists() == false) {
-			// It uses the data extracted using TweetDataExtractor to find
-			// average, range and theta for all features. It then stores these
-			// to the file.
+			// It uses the features extracted from the tweets to find
+			// average, range and theta for all features. It then stores
+			// these to the file.
 			RetweetPredictor retweetPredictor = new RetweetPredictor(file);
 		}
 		Scanner st = new Scanner(new BufferedReader(new FileReader(file)));
