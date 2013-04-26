@@ -2,6 +2,7 @@ package virulencePredictor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -42,6 +43,9 @@ class ML {
 
 public class Solution {
 	public static void main(String[] args) throws IOException {
+		System.out.println("Should I segregate the results in buckets (y/n)");
+		Scanner s = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
+		String segregate = s.next();
 		Scanner st = new Scanner(new BufferedReader(new FileReader("Data.txt")));
 		BufferedWriter fw = new BufferedWriter(new FileWriter("Result.txt"));
 		// n is the number of tweets.
@@ -54,7 +58,7 @@ public class Solution {
 		Random rn = new Random();
 		fw.write("Original\tPredicted\n");
 		while (st.hasNext()) {
-			int prob = rn.nextInt(10000);
+			int prob = rn.nextInt(1000);
 			if (prob == 0) {
 				features[0] = 1;
 				int i = 1;
@@ -66,12 +70,19 @@ public class Solution {
 						features[i++] = features[x]*features[y];
 					}
 				}
-
-				int numberOfRetweets = st.nextInt();
-				int predicted = Math.max(0, predict(someTweets, features));
-				fw.write(numberOfRetweets + "\t" + predicted + "\n");
-				System.out.println(numberOfRetweets + "\t" + predicted);
-				st.nextLine();
+				if (segregate.equals("y") || segregate.equals("Y")) {
+					int numberOfRetweets = bin(st.nextInt());
+					int predicted = bin(Math.max(0, predict(someTweets, features)));
+					fw.write(numberOfRetweets + "\t" + predicted + "\n");
+					System.out.println(numberOfRetweets + "\t" + predicted);
+					st.nextLine();
+				} else {
+					int numberOfRetweets = st.nextInt();
+					int predicted = Math.max(0, predict(someTweets, features));
+					fw.write(numberOfRetweets + "\t" + predicted + "\n");
+					System.out.println(numberOfRetweets + "\t" + predicted);
+					st.nextLine();
+				}
 			} else {
 				st.nextLine();	// Skip this line.
 			}
